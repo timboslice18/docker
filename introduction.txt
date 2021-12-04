@@ -1,0 +1,43 @@
+Definitions
+
+Image - Single file with all the deps and config required to run a program
+Container - Instance of an image. Runs a program
+Namespacing - Isolating resources per process (or group of resources)
+Control Groups (cgroups) - Limit amount of resources used per rocess
+	*Namespacing & Controlgroups are linux only
+
+
+
+Docker CLI Introduction
+
+	#Run rocker image
+	docker run <image-name>
+	
+	#Override echo hi there
+	docker run busybox echo hi there
+	
+	#Override to run "ls" commnad
+	docker run busybox ls
+	
+	#list running containers
+	docker ps <--all>
+	CONTAINER ID   IMAGE     COMMAND             CREATED          STATUS          PORTS     NAMES
+	fb8b88a49617   busybox   "ping google.com"   12 seconds ago   Up 10 seconds             infallible_gould
+	
+	*"Docker run" command is like running "docker create" and "docker start"
+	docker create hello-world
+	d36795083d485ac53a52516e5960f8c5652ebbb99db36a3d1403464b511689b1
+	
+	#the -a flag makes docker watch for output from the container and print it to the terminal
+	docker start -a d36795083d485ac53a52516e5960f8c5652ebbb99db36a3d1403464b511689b1
+	
+	#Removing stopped containers
+	docker system prune
+	
+	#Retriving log outputs. Gives you a record of logs emitted from container
+	docker logs <container-id>
+	
+	#Stop running container
+	docker stop <container-id>
+	docker kill <container-id>
+
