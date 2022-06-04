@@ -1,0 +1,54 @@
+Chain Run Instructions
+	- Each RUN command will execute the command on the top writable layer of the container, then commit the container as a new image.
+	- The new image is used for the next step in the dockerfile. So each RUN instruction will create a new image layer
+	- It is recommended to chain the RUN instructions in the dockerfile to reduce the number of image layers it creates
+
+####
+FROM debian:jessie
+RUN apt-get update
+RUN apt-get install -y git
+RUN apt-get install -y vim
+####
+
+When chained the dockerfile from above is changed to below:
+
+####
+FROM debian:jessie
+RUN apt-get update && apt-get install -y \
+    git \
+    vim
+####
+
+
+Sort multi-line arguments alphanumerically
+	- This will help you avoid duplication of packages and make the list much easier to update
+
+####
+FROM debian:jessie
+RUN apt-get update && apt-get install -y \
+    git \
+    python \
+    vim
+####
+
+
+CMD instructions
+	- CMD instruction specifies what command you want to run when the container starts up
+	- If we don't specify CMD instruction in the dockerfile, docker will use the default command defined in the base image
+	- The CMD instruction doesn't run when building the image, it only runs when the container starts up
+	- You can specify the command in either exec form which is preferred or in shell form
+
+####
+FROM debian:jessie
+RUN apt-get update && apt-get install -y \
+    git \
+    python \
+    vim
+CMD ["echo", "hello world"]
+####
+
+
+Docker Cache
+
+
+
