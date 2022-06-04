@@ -1,0 +1,20 @@
+CPU
+
+default setting is 1024
+
+to modify (lower is less prefered):
+	docker container run --cpu-shares=512 webapp4
+	
+To specify which CPU for a host to use:
+	docker container run --cpuset-cpus=0-1 webapp1
+	docker container run --cpuset-cpus=2 webapp1
+	
+Use the "count" option
+	docker container run --cpus=2.5 webapp4
+	docker container update --cpus=0.5 webapp4
+	
+
+Memory
+
+Set the value. The container can use up to 512 m of memory. Container gets doubled in swap space if it exceeds 512m
+	docker container run --memory=512m --memory-swap=512m webapp
