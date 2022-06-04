@@ -1,0 +1,155 @@
+Definitions
+
+Image - Single file with all the deps and config required to run a program
+Container - Instance of an image. Runs a program
+Namespacing - Isolating resources per process (or group of resources)
+Control Groups (cgroups) - Limit amount of resources used per rocess
+	*Namespacing & Controlgroups are linux only
+
+
+
+Docker CLI Introduction
+
+	#Run docker image
+	docker run <image-name>
+	
+	#Override echo hi there
+	docker run busybox echo hi there
+	
+	#Override to run "ls" commnad
+	docker run busybox ls
+	
+	#use -d to run in detached mode 
+	docker run -d <image-name>
+	
+	#use attach command to attach to container
+	docker attach <image-id>
+	
+	#list running containers
+	docker ps <--all>
+	CONTAINER ID   IMAGE     COMMAND             CREATED          STATUS          PORTS     NAMES
+	fb8b88a49617   busybox   "ping google.com"   12 seconds ago   Up 10 seconds             infallible_gould
+	
+	*"Docker run" command is like running "docker create" and "docker start"
+	docker create hello-world
+	d36795083d485ac53a52516e5960f8c5652ebbb99db36a3d1403464b511689b1
+	
+	#the -a flag makes docker watch for output from the container and print it to the terminal
+	docker start -a d36795083d485ac53a52516e5960f8c5652ebbb99db36a3d1403464b511689b1
+	
+	#Removing stopped containers
+	docker system prune
+	
+	#Retriving log outputs. Gives you a record of logs emitted from container
+	docker logs <container-id>
+	
+	#Stop running container
+	docker stop <container-id>
+	docker kill <container-id>
+	docker kill $(docker ps -q)
+	
+	
+	#-i flag directs anything you type to stdin
+	#-t flag pretties it all up
+	docker exec -it <container-id> <command>
+	
+	#open a shell in the context of your running container.
+	#sh gives you full terminal access to the container
+	docker exec -it <container-id> sh 
+	
+	#add tag to docker build
+	 #-t <dockerid>/<repo/project_name>/version
+	docker build -t timbosclice/redis:latest
+	!
+	docker images
+	REPOSITORY          TAG       IMAGE ID       CREATED          SIZE
+	timbosclice/redis   latest    38c7b8ecfa1d   6 minutes ago    126MB
+	
+	# add -f option to specify filename. Used if not planning to use 
+	docker build -f <filename> .
+	
+	#-v puts a bookmark on the node_modules folder & maps the pwd (present working directory) into the /app folder
+	docker run -p 3000:3000 -v /app/node_modules -v $(pwd):/app <image_id>
+	
+	#remove image
+	docker rm <image-id>
+	
+	#delete all images
+	docker rmi -f $(docker images -aq)
+	
+	#--name option lets you name a container, webapp in this case
+	docker run -d --name webapp nginx:1.14-alpine
+	
+	#copy data from /opt/datadir
+	docker run -v /opt/datadir:/var/lib/mysql mysql
+	
+	#get docker logs
+	docker logs <container id>
+	
+	#Run a container named "blue-app" and set envrionemtn variable APP_COLOR to blue. Make sure application is available on port 38282 and listening on port 8080
+	docker run -p 38282:8080 --name blue-app -e APP_COLOR=blue -d kodekloud/simple-webapp
+	
+	#Deploy a mysql database with a root password set. Dockerhub explains how to set env variables for images
+	docker run -d -e MYSQL_ROOT_PASSWORD=db_pass123 --name mysql-db mysql
+	
+	#run a container on a different host w/ -H option
+	docker -H=10.123.2.1:2375 run nginx
+	
+	#tells docker to limit cpu usage to 50%
+	docker run --cpus=.5 ubuntu
+	docker run --memory=100m ubuntu
+	
+	#create volume mount on the run command (LEGACY - USE --mount instead
+	docker run -v data_volume:/var/lib/mysql mysql
+	
+	#mount option is prefered way to mount volumes
+	docker run --mount type=bind, source=/data/mysql,target=/var/lib/mysql mysql
+	
+	
+	#long docker run command. Deploy a web app named <webapp> using the <kodekloud/simple-web-app-mysql image. Exporse port to 38080 on the host w/ 2 env variables
+	docker run --network=wp-mysql-network -e DB_Host=mysql-db -e DB_Password=db_pass123 -p 38080:8080 --name webapp --link mysql-db:mysql-db -d kodekloud/simple-webapp-mysql
+	
+	
+	Docker container run options
+	
+	#sets hostname of container
+	--hostname=webapp
+	
+	#restart options
+	--restart=no|on-failure|always|unless-stopped
+	
+	#removes image
+	--rm <name>
+	
+	Troubleshooting
+	
+	#attach to a running container
+	docker container attach ubuntu
+	
+	#container stats
+	docker container stats
+	
+	#list top processes of a container
+	docker container top <name>
+	
+	#get logs of a container, -f option makes it show in realtime
+	docker container logs -f <name>
+	
+	#list all docker events in last 60 minutes
+	docker system events --since 60m
+	
+	
+	Stopping and Removing a Container
+	
+	docker container pause <name>
+	docker container unpause <name>
+	docker container stop <name>
+	docker container kill <name>
+	
+	#remove container
+	docker container rm <name>
+
+	#remove all containers
+	docker container stop $(docker container ls -q)
+	docker container rm $(docker container ls-aq)
+	docker container prune
