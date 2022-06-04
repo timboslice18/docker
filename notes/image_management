@@ -1,0 +1,25 @@
+Search docker registry
+docker search <image> --limit <x>
+docker search --filter stars=10 httpd
+
+Pull image but don't create a container from it
+docker image pull httpd
+
+Tag image
+docker image tag httpd:alpine httpd:custom
+
+lists sizes of images
+docker system df
+
+deletes unused images
+docker image prune -a
+
+lists all layers uysed to create an image. Helpful if you don't have the dockerfile used to build an image
+docker image history ubuntu
+
+
+retreive the OS for the httpd image using jsonpath
+docker inspect httpd -f '{{.Os}}'
+
+saves image to be used in other locations
+docker image save alpine:latest -o alpine.tar
