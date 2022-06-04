@@ -1,0 +1,76 @@
+When you install docker, 3 networks are created automatically
+	- Bridge (default)
+	- None
+	- Host
+	
+	
+To assign a host to a seperate network other than the default (bridge), you use the --network option in the docker run command
+	docker run ubuntu --network=<none|host>
+	
+Host network removes the need for port mapping, as it exposes a port on the docker hosts IP, using a specific port
+
+
+	
+Creating User-defined networks
+
+	docker network create \
+	--driver bridge \
+	--subnet 182.18.0.0/16
+	custom-isolated-network
+	
+	To connect a container to an existing custom network
+		docker network connect custom-net my-container
+	
+Docker has a built-in DNS server that runs on 127.0.0.11 and is able to resolve anything inside the docker host
+
+
+Create a new network namespace on linux host
+	ip netns add red
+	ip netns add blue
+	
+	List network namespaces
+	ip netns
+	
+	Run commands in network namespaces
+	ip netns exec red ip link
+	!
+	ip -n red ip link
+	!
+	ip netns exec red route
+	
+
+Assign IPs to specific interfaces in namespaces
+	ip link add veth-red type veth peer name veth-blue
+	ip link set veth-red netns red
+	ip link set veth-blue netns blue
+	ip -n red addr add 192.168.15.1 dev veth-red
+	ip -n blue addr add 192.168.15.2 dev veth-blue
+	ip -n red link set veth-red up
+	ip -n blue link set veth-blue up
+	
+Creating a virtual switch
+	
+	Add new interface to linux host
+		ip link add v-net-0 type bridge
+		ip link set dev v-net-0 up
+		
+	Connect namespaces to the new virtual switch
+		ip link add veth-red type veth peer name veth-red-br
+		ip link add veth-blue type veth peer name veth-blue-br
+		ip link set veth-red netns red
+		ip link set veth-red-br master v-net-0
+		ip link set veth-blue netns blue
+		ip link set veth-blue-br master v-net-0
+		ip -n red addr add 192.168.15.1 dev veth-red
+		ip -n blue addr add 192.168.15.2 dev veth-blue
+		ip -n red link set veth-red up
+		ip -n blue link set veth-blue up
+		
+
+	
+	
+	
+	
+	
+	
+	
