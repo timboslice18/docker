@@ -1,0 +1,21 @@
+/etc/docker/daemon.json
+
+{
+	"hosts": ["tcp://192.168.1.10:2376"]
+	
+	"tls": true,
+	"tlscert": "/var/docker/server.pem",
+	"tlskey": "/var/docker/serverkey.pem"
+	"tlsverify": true;
+	"tlscacert": "/var/docker/caserver.pem"
+}
+
+
+Set env variables:
+
+	export DOCKER_TLS=true
+	export DOCKER_HOST="tcp://192.168.1.10:2376"
+
+Run docker commands:
+
+docker --tlsverify --tlscert=<> --tlskey=<> --tlscacert=<> ps
