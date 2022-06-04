@@ -1,0 +1,32 @@
+If you are accessing a docker host remotely, make sure you are setting the env variable:
+export DOCKER_HOST="tcp://192.168.1.10:2375"
+	-2375 unencrypted
+	-2376 encrypted
+
+#view logs
+journalctl -u docker.service
+
+/etc/docker/daemon.json - config file
+
+#check free space
+df -h
+
+docker system info
+
+
+Enable docker debug mode
+
+# lists debug status
+docker system info
+
+edit the /etc/docker/daemon.json file by setting debug: true
+
+logs can be found in /var/lib/container/<containerid>.json
+
+
+
+Logging drivers
+
+
+Logging drivers can be set in the /etc/docker/daemon.json
+	-syslog, awslog, etc. are options
