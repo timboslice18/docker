@@ -1,0 +1,27 @@
+Steps:
+	1. Pick OS - Ubuntu
+	2. Update apt repo
+	3. Install dependencies using apt
+	4. install python dependencies using pip
+	5. copy source code to /opt folder
+	6. run the web server using "flask" command
+
+#Dockerfile
+FROM Ubuntu
+
+RUN apt-get update
+RUN apt-get install python
+
+RUN pip install flask
+RUN pip install flask-mysql
+
+COPY . /opt/source-code
+
+ENTRYPOINT FLASK_APP=/opt/source-code/app.py flask run
+
+
+#run docker build command
+docker build Dockerfile -t mmumshad/my-custom-app .
+
+#make available on docker registery
+docker push <username>/<image-name>
