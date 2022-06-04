@@ -1,0 +1,70 @@
+Docker Compose
+
+Seperate tool that gets installed w/ docker
+
+Used to start up multiple docker containers at the same time
+
+Automates some of the long-winded arguments we were passing to 'docker run'
+
+Written in yml
+
+
+	Commands
+	
+	#docker run myimage
+	docker-compose up
+	
+	#Runs "docker build ." & "docker run myimage"
+	docker-compose up --build
+	
+	#Launch in background w/ -d flag
+	docker-compose up -d
+	
+	#Stop containers
+	docker-compose down
+	
+	
+	Restart Policies
+	
+	No - never attempt to restart this . container if it stops or crashes
+	always - if this container stops *for any reason* always attempt to restart it
+	on-failure - only restart if the container stops with an error code
+	unless-stopped - always restart unless we (the developers) forcibly stop it
+	
+
+docker-compose v1 vs v2 vs v3
+
+**if you're using version 2 of docker-compse files, you must specify "version: 2" at the top and everything is nested inside "services: " & version 3 must include "version: 3" at the top.**
+
+**version 2 does not use links**
+
+**version 3 enabled docker swarm**
+
+
+Networking in Docker-compose
+
+version: 2
+services:
+  redis:
+    image: redis
+    networks:
+      - back-end
+  db:
+    image: postgres:9.4
+    networks:
+      - back-end
+  vote:
+    image: voting-app
+    networks:
+      - front-end
+      - back-end
+  result:
+    image: result
+    networks:
+      - front-end
+      - back-end
+
+networks:
+  front-end:
+  back-end:
+
