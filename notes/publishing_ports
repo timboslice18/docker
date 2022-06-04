@@ -1,0 +1,19 @@
+#Map port 80 on the docker host to port 5000 on the webapp
+docker run -p 80:5000 kodekloud/simple-webapp
+
+with the -p, by default that means it can be reached on any nic on the docker host
+
+To limit that, add the IP address in front of the ports:
+docker run -p 192.168.1.5:80:5000 kodekloud/simple-webapp
+
+a Capital P option (-P) automatically publishes port on the container. It is defined in the EXPOSE instruction in the Dockerfile
+
+You can also expose port in the docker run command:
+docker run -P --expose=8080 kokekloud/simple-webapp
+
+docker inspect can show exposed ports
+
+Docker uses IPtables to implement port mapping
+
+#lists port mappings created by docker
+iptables -t nat -S DOCKER
